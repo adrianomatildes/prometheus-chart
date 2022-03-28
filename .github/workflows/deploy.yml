@@ -1,15 +1,16 @@
-name: Deploy
-on: ['maste']
-
+on: push
+name: deploy
 jobs:
-  deployment:
-    runs-on: 'ubuntu-latest'
+  deploy:
+    name: deploy to cluster
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-
-    - name: 'Deploy'
-      uses: 'deliverybot/helm@v1'
-      run: helm install prometheus prometheus-community/prometheus --namespace obs --create-namespace --set server.service.type=NodePort
-
+    - uses: actions/checkout@master
+    - name: deploy to cluster
+      uses: wahyd4/kubectl-helm-action@master
       env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      with: 
+        args: |
+          kubectl apply -f  namespace.yaml
+          kubectl apply -f prometheus-operator.yaml -n obs
