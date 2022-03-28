@@ -1,0 +1,15 @@
+name: Deploy
+on: ['maste']
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      run: helm install prometheus prometheus-community/prometheus --namespace obs --create-namespace --set server.service.type=NodePort
+
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
