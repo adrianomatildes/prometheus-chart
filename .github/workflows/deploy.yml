@@ -23,5 +23,5 @@ jobs:
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
-          helm uninstall prometheus
+          
           helm install prometheus-operator bitnami/kube-prometheus -f prometheus-operator.yaml
