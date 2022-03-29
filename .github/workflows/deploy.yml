@@ -13,12 +13,11 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
         
-    - uses: actions/checkout@master
-    - name: deploy to cluster
+    - name: deploy postgres to cluster
       uses: wahyd4/kubectl-helm-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      with: 
+      with:
         args: |
-          kubectl apply -f  namespace.yaml
-          kubectl apply -f prometheus-operator.yaml -n obs
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm upgrade --install postgres -n data bitnami/postgresql
